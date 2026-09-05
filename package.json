@@ -1,7 +1,7 @@
 {
   "name": "mindora-app",
   "version": "1.0.0",
-  "description": "Mindora Web Application",
+  "description": "Mindora Web Application", 
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
