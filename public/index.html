@@ -1,65 +1,790 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mindora</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindora — Your Mind Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#7A1B3D; --maroon-dark:#5E1530;
+    --rose:#C2687A; --rose-light:#F6D9DD;
+    --cream:#FDF4F1; --panel:#FFFFFF;
+    --ink:#2B1A22; --ink-soft:#6B5560;
+    --border:#F1DCDD;
+    --shadow: 0 8px 30px rgba(122,27,61,0.06);
+    --shadow-hover: 0 12px 40px rgba(122,27,61,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--cream); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand{font-family:'Playfair Display',serif;}
+  a{text-decoration:none;color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* ===== Top Nav ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 48px;background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:50;
+  }
+  .brand-block{display:flex;align-items:center;gap:10px;cursor:pointer;transition:transform 0.2s;}
+  .brand-block:hover{transform:scale(1.02);}
+  .brand-mark{
+    width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(135deg, var(--rose-light), var(--rose));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--panel);font-size:22px;
+  }
+  .brand-text .brand{font-size:22px;color:var(--maroon-dark);line-height:1;letter-spacing:0.5px;font-weight:700;}
+  .brand-text .tag{font-size:11.5px;color:var(--rose);letter-spacing:0.3px;margin-top:2px;font-weight:500;}
+
+  .nav-links{display:flex;gap:30px;list-style:none;margin:0;padding:0;}
+  .nav-links button{
+    background:none;border:none;font-size:15px;color:var(--ink-soft);
+    padding:6px 2px;border-bottom:2px solid transparent;
+    transition:all .2s ease;font-weight:500;
+  }
+  .nav-links button:hover{color:var(--maroon);}
+  .nav-links button.active{color:var(--maroon-dark);font-weight:600;border-color:var(--maroon-dark);}
+
+  #navDashboard { display: none; color: #D93025; }
+  #navDashboard.active { border-color: #D93025; }
+
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .btn{
+    border-radius:10px;font-size:14.5px;padding:10px 20px;
+    display:inline-flex;align-items:center;gap:8px;font-weight:500;
+    border:1px solid transparent;transition:all .2s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-outline{background:var(--panel);border-color:var(--border);color:var(--ink);}
+  .btn-outline:hover{border-color:var(--rose);background:var(--rose-light);color:var(--maroon-dark);}
+  .btn-primary{background:var(--maroon-dark);color:#fff;}
+  .btn-primary:hover{background:var(--maroon);box-shadow:0 6px 20px rgba(94,21,48,0.25);transform:translateY(-1px);}
+
+  .avatar{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,var(--rose-light),var(--rose));
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+    box-shadow:0 2px 8px rgba(194,104,122,0.3);
+  }
+  .user-chip{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink);font-weight:500;}
+  .mobile-menu-btn{display:none;background:none;border:none;color:var(--ink);font-size:24px;padding:4px;}
+
+  /* ===== Role Badges ===== */
+  .role-badge{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:11px;padding:3px 8px;border-radius:12px;
+    font-weight:600;letter-spacing:0.5px;text-transform:uppercase;
+  }
+  .role-admin{background:linear-gradient(135deg, #111, #333);color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+  .role-host{background:linear-gradient(135deg, #FFD700, #F5A623);color:#fff;box-shadow:0 2px 6px rgba(245,166,35,0.3);}
+  .role-mod{background:linear-gradient(135deg, #9b59b6, #8e44ad);color:#fff;box-shadow:0 2px 6px rgba(142,68,173,0.3);}
+
+  main{max-width:1200px;margin:0 auto;padding:48px 24px;}
+  .page{display:none;}
+  .page.active{display:block;animation:fade .4s cubic-bezier(0.16, 1, 0.3, 1);}
+  @keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ===== HOME ===== */
+  .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;padding:20px 0 60px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;background:var(--rose-light);
+    color:var(--maroon-dark);padding:8px 16px;border-radius:20px;
+    font-size:13px;font-weight:600;margin-bottom:24px;box-shadow:0 2px 10px rgba(194,104,122,0.15);
+  }
+  .hero h1{font-size:56px;line-height:1.1;font-weight:700;color:var(--ink);margin:0 0 24px;}
+  .hero h1 em{font-style:normal;color:var(--rose);position:relative;}
+  .hero h1 em::after{
+    content:'';position:absolute;bottom:4px;left:0;width:100%;height:8px;
+    background:var(--rose-light);z-index:-1;border-radius:4px;
+  }
+  .hero p.lede{font-size:18px;color:var(--ink-soft);max-width:460px;line-height:1.6;margin-bottom:34px;}
+  
+  .feature-row{display:flex;gap:34px;margin-bottom:40px;flex-wrap:wrap;}
+  .feature-item{display:flex;gap:14px;max-width:200px;}
+  .feature-icon{
+    width:46px;height:46px;flex:0 0 auto;border-radius:14px;
+    background:var(--rose-light);color:var(--maroon-dark);
+    display:flex;align-items:center;justify-content:center;font-size:20px;
+  }
+  .feature-item h4{margin:0 0 4px;font-size:15px;font-family:'Inter';font-weight:600;}
+  .feature-item p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap;}
+  .hero-art img{
+    width:100%;max-width:540px;border-radius:24px;display:block;
+    box-shadow:0 24px 48px rgba(122,27,61,0.15);
+    animation:float 6s ease-in-out infinite;
+  }
+  @keyframes float{0%{transform:translateY(0);}50%{transform:translateY(-12px);}100%{transform:translateY(0);}}
+
+  .stats-bar{
+    display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel);
+    border-radius:20px;box-shadow:var(--shadow);padding:30px 10px;
+  }
+  .stat{display:flex;align-items:center;gap:14px;padding:0 24px;border-right:1px solid var(--border);}
+  .stat:last-child{border-right:none;}
+  .stat-icon{
+    width:42px;height:42px;border-radius:12px;background:var(--rose-light);
+    color:var(--maroon-dark);display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .stat .num{font-size:22px;font-weight:700;color:var(--maroon-dark);font-family:'Playfair Display';}
+  .stat .label{font-size:13px;color:var(--ink-soft);font-weight:500;}
+
+  /* ===== GENERAL COMPONENTS ===== */
+  .page-header{text-align:center;margin-bottom:40px;}
+  .page-header h2{font-size:38px;margin:0 0 10px;color:var(--ink);}
+  .page-header p{color:var(--ink-soft);margin:0;font-size:16px;}
+
+  .search-row{display:flex;gap:16px;max-width:900px;margin:0 auto 34px;}
+  .search-box{flex:1;position:relative;}
+  .search-box input, .contact-box input, .contact-box select, .contact-box textarea{
+    width:100%;padding:14px 16px;border:1px solid var(--border);
+    border-radius:12px;font-size:15px;background:var(--panel);color:var(--ink);
+    box-shadow:var(--shadow);transition:border .2s;
+  }
+  .search-box input{padding-left:44px;}
+  .search-box input:focus, .contact-box input:focus, .contact-box select:focus, .contact-box textarea:focus{outline:none;border-color:var(--maroon);}
+  .search-box .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--ink-soft);}
+  .sort-select{
+    padding:14px 18px;border:1px solid var(--border);border-radius:12px;
+    background:var(--panel);font-size:15px;color:var(--ink);min-width:160px;
+    box-shadow:var(--shadow);cursor:pointer;
+  }
+
+  .post-list{display:flex;flex-direction:column;gap:20px;max-width:900px;margin:0 auto;}
+  .post-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:20px;
+    padding:28px;box-shadow:var(--shadow);transition:box-shadow .2s ease;
+    animation:slideUp .4s ease backwards;
+  }
+  @keyframes slideUp{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+  .post-card:hover{box-shadow:var(--shadow-hover);}
+  .post-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .post-user{display:flex;gap:14px;align-items:center;}
+  .post-user .name{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;}
+  .post-user .time{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .mood-tag{
+    display:inline-flex;align-items:center;gap:6px;background:var(--rose-light);
+    color:var(--maroon-dark);font-size:13px;padding:6px 12px;border-radius:20px;font-weight:600;
+  }
+  .post-text{font-size:16px;line-height:1.65;color:var(--ink);margin-bottom:20px;white-space:pre-wrap;}
+  .post-actions{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--border);}
+  .post-actions .left{display:flex;gap:24px;}
+  .stat-inline{
+    display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--ink-soft);
+    background:none;border:none;padding:6px 10px;cursor:pointer;border-radius:8px;
+    transition:background .2s;font-weight:500;
+  }
+  .stat-inline:hover{background:var(--rose-light);color:var(--maroon-dark);}
+  .stat-inline.liked{color:var(--maroon);background:var(--rose-light);}
+  .stat-inline.liked svg{fill:var(--maroon);}
+  
+  .btn-delete{
+    background:#FFF0F0;color:#D93025;border:1px solid #FAD2D2;
+    padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;
+    display:flex;align-items:center;gap:6px;transition:all .2s;
+  }
+  .btn-delete:hover{background:#D93025;color:#fff;}
+
+  /* ===== SHARE / CONTACT ===== */
+  .share-wrap{max-width:820px;margin:0 auto;text-align:center;}
+  textarea{
+    width:100%;min-height:220px;border:1px solid var(--border);border-radius:20px;
+    background:var(--panel);padding:24px;font-size:16px;font-family:'Inter';
+    color:var(--ink);resize:vertical;box-shadow:var(--shadow);line-height:1.6;
+  }
+  textarea:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 4px var(--rose-light);}
+  .char-count{text-align:right;font-size:13px;color:var(--ink-soft);margin:10px 4px 34px 0;font-weight:500;}
+
+  .mood-title{font-size:18px;font-weight:600;margin-bottom:20px;}
+  .mood-row{display:flex;justify-content:center;gap:30px;margin-bottom:34px;flex-wrap:wrap;}
+  .mood{display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;}
+  .mood .circle{
+    width:68px;height:68px;border-radius:50%;background:var(--panel);box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:center;font-size:30px;
+    border:2px solid transparent;transition:all .2s ease;
+  }
+  .mood span{font-size:14px;color:var(--ink-soft);font-weight:500;}
+  .mood:hover .circle{transform:translateY(-4px);box-shadow:var(--shadow-hover);}
+  .mood.selected .circle{border-color:var(--maroon);background:var(--rose-light);transform:translateY(-4px);}
+  .mood.selected span{color:var(--maroon-dark);font-weight:700;}
+  .share-submit{width:100%;max-width:360px;justify-content:center;font-size:16px;padding:16px;}
+
+  .contact-box{max-width:600px;margin:0 auto;text-align:left;background:var(--panel);padding:40px;border-radius:24px;box-shadow:var(--shadow);}
+  .contact-box label{display:block;font-weight:600;margin-bottom:8px;font-size:14px;}
+  .contact-box .form-group{margin-bottom:24px;}
+  .contact-box textarea{min-height:150px;padding:16px;}
+
+  /* ===== DASHBOARD (STAFF ONLY) ===== */
+  .dash-grid{display:grid;grid-template-columns:1fr 2fr;gap:30px;}
+  .dash-card{background:var(--panel);border-radius:20px;padding:30px;box-shadow:var(--shadow);}
+  .dash-card h3{margin:0 0 20px;font-size:20px;}
+  .inbox-list{display:flex;flex-direction:column;gap:12px;}
+  .inbox-item{padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--cream);}
+  .inbox-item .header{display:flex;justify-content:space-between;font-weight:600;margin-bottom:8px;font-size:14px;}
+  .inbox-item .type{color:var(--maroon);background:var(--rose-light);padding:2px 8px;border-radius:12px;font-size:11px;}
+  .inbox-item p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.5;}
+
+  /* ===== AUTH ===== */
+  .auth-wrap{
+    display:grid;grid-template-columns:1fr 1.1fr;max-width:1040px;margin:10px auto;
+    background:var(--panel);border-radius:28px;overflow:hidden;box-shadow:0 24px 60px rgba(122,27,61,0.12);
+  }
+  .auth-illustration{
+    background:linear-gradient(165deg,var(--rose-light),#FBE4E4);padding:50px 44px;
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .auth-illustration h1{font-size:36px;line-height:1.15;color:var(--ink);margin:30px 0 12px;}
+  .auth-illustration > p{font-size:15px;color:var(--ink-soft);margin:0 0 40px;line-height:1.6;}
+  .auth-art img{width:100%;max-width:380px;display:block;border-radius:16px;margin-bottom:24px;box-shadow:var(--shadow);}
+  
+  .auth-panel{padding:50px 56px;}
+  .auth-tabs{display:flex;gap:24px;border-bottom:1px solid var(--border);margin-bottom:34px;}
+  .auth-tab{
+    background:none;border:none;font-size:15px;color:var(--ink-soft);
+    padding:0 0 14px;border-bottom:2px solid transparent;font-family:'Playfair Display',serif;font-weight:600;
+  }
+  .auth-tab.active{color:var(--maroon-dark);border-color:var(--maroon-dark);}
+  .auth-form{display:none;}
+  .auth-form.active{display:block;animation:fade .3s ease;}
+  .form-group{margin-bottom:20px;text-align:left;}
+  .form-group label{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .input-wrap{position:relative;}
+  .input-wrap .ic-left{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--maroon);display:flex;}
+  .input-wrap input{
+    width:100%;padding:14px 16px 14px 46px;border:1px solid var(--border);
+    border-radius:12px;font-size:15px;background:var(--cream);transition:all .2s;
+  }
+  .input-wrap input:focus{outline:none;border-color:var(--maroon);background:var(--panel);box-shadow:0 0 0 3px var(--rose-light);}
+
+  /* ===== MODAL & TOAST ===== */
+  .toast-container{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+    z-index:999;display:flex;flex-direction:column;gap:10px;pointer-events:none;
+  }
+  .toast{
+    background:var(--ink);color:#fff;padding:14px 24px;border-radius:30px;
+    font-size:14px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    display:flex;align-items:center;gap:10px;
+    animation:toastIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  .toast.fadeOut{animation:toastOut 0.3s forwards;}
+  @keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.9);}to{opacity:1;transform:translateY(0) scale(1);}}
+  @keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1);}to{opacity:0;transform:translateY(20px) scale(0.9);}}
+
+  @media (max-width:900px){
+    .topbar{padding:14px 20px;}
+    .mobile-menu-btn{display:block;}
+    .nav-links{
+      display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;
+      background:rgba(255,255,255,0.98);padding:18px;gap:16px;border-bottom:1px solid var(--border);
     }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #0f172a;
-      color: #f8fafc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .card {
-      background-color: #1e293b;
-      padding: 32px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 12px;
-      color: #38bdf8;
-    }
-    p {
-      color: #94a3b8;
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 24px;
-    }
-    .btn {
-      display: inline-block;
-      background-color: #0284c7;
-      color: #ffffff;
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background-color 0.2s;
-    }
-    .btn:hover {
-      background-color: #0369a1;
-    }
-  </style>
+    .nav-links.show{display:flex;}
+    .hero{grid-template-columns:1fr;}
+    .dash-grid{grid-template-columns:1fr;}
+    .stats-bar{grid-template-columns:repeat(2,1fr);row-gap:24px;}
+    .stat{border-right:none;}
+    .auth-wrap{grid-template-columns:1fr;border-radius:20px;}
+    .auth-illustration,.auth-panel{padding:30px 24px;}
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>Welcome to Mindora</h1>
-    <p>Your web application is live and running smoothly.</p>
-    <a href="#" class="btn">Get Started</a>
+
+<div class="topbar">
+  <div class="brand-block" onclick="goTo('home')">
+    <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4 4 6 4 10a4 4 0 0 1-8 0c0-4 3-6 4-10z" stroke="currentColor" stroke-width="2" fill="currentColor"/></svg></span>
+    <div class="brand-text">
+      <div class="brand">MINDORA</div>
+      <div class="tag">Your Mind Matters</div>
+    </div>
   </div>
+
+  <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><button class="nav-btn active" data-page="home">Home</button></li>
+    <li><button class="nav-btn" data-page="community">Community</button></li>
+    <li><button class="nav-btn" data-page="share">Write a Post</button></li>
+    <li><button class="nav-btn" data-page="contact">Contact Us</button></li>
+    <li><button class="nav-btn" data-page="dashboard" id="navDashboard">🛡️ Staff Portal</button></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="btn btn-outline" id="authNavBtn" onclick="goTo('auth'); switchAuthTab('login')">Login</button>
+    <div class="user-chip">
+      <div class="avatar">🙂</div>
+      <div style="display:flex; flex-direction:column; line-height:1.2;">
+        <span id="currentUserLabel">Anonymous</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- HOME -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div>
+        <span class="eyebrow">Anonymous space</span>
+        <h1>Your private<br>space to <em>talk</em> and<br><em>connect</em></h1>
+        <p class="lede">A safe place to share your thoughts, feel heard, and heal together — one honest post at a time.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="goTo('share')">Write a Post</button>
+          <button class="btn btn-outline" onclick="goTo('community')">Explore community</button>
+        </div>
+      </div>
+      <div class="hero-art"><img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=700&q=80" alt="Mindora nature concept"></div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-icon">🌟</div><div><div class="num">10K+</div><div class="label">Growing members</div></div></div>
+      <div class="stat"><div class="stat-icon">💬</div><div><div class="num">25K+</div><div class="label">Thoughts shared</div></div></div>
+      <div class="stat"><div class="stat-icon">🔒</div><div><div class="num">100%</div><div class="label">Always private</div></div></div>
+      <div class="stat"><div class="stat-icon">💜</div><div><div class="num">Safe</div><div class="label">You are not alone</div></div></div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="page" id="page-community">
+    <div class="page-header"><h2>Community Feed</h2><p>Real thoughts. Real people. All anonymous.</p></div>
+    <div class="search-row">
+      <div class="search-box">
+        <span class="ic">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search by keyword, mood, or user..." oninput="renderPosts()">
+      </div>
+      <select class="sort-select" id="sortSelect" onchange="renderPosts()">
+        <option value="recent">Most Recent</option>
+        <option value="liked">Most Liked</option>
+      </select>
+    </div>
+    <div class="post-list" id="post-list"></div>
+  </section>
+
+  <!-- SHARE -->
+  <section class="page" id="page-share">
+    <div class="share-wrap">
+      <h2>What's on your mind?</h2>
+      <p>Share freely. Our community is here to listen.</p>
+      <textarea id="shareText" maxlength="1000" placeholder="Write your thoughts here..." oninput="document.getElementById('charCount').textContent = this.value.length"></textarea>
+      <div class="char-count"><span id="charCount">0</span>/1000</div>
+      
+      <div class="mood-title">How are you feeling today?</div>
+      <div class="mood-row">
+        <div class="mood" data-mood="Sad" data-emoji="😢"><div class="circle">😢</div><span>Sad</span></div>
+        <div class="mood" data-mood="Okay" data-emoji="🙂"><div class="circle">🙂</div><span>Okay</span></div>
+        <div class="mood" data-mood="Good" data-emoji="😊"><div class="circle">😊</div><span>Good</span></div>
+        <div class="mood" data-mood="Happy" data-emoji="😄"><div class="circle">😄</div><span>Happy</span></div>
+        <div class="mood" data-mood="Loved" data-emoji="❤️"><div class="circle">❤️</div><span>Loved</span></div>
+      </div>
+      <button class="btn btn-primary share-submit" onclick="submitPost()">Share anonymously</button>
+    </div>
+  </section>
+
+  <!-- CONTACT STAFF -->
+  <section class="page" id="page-contact">
+    <div class="page-header">
+      <h2>Contact Staff</h2>
+      <p>Reach out securely to our Admins, Hosts, and Moderators.</p>
+    </div>
+    <div class="contact-box">
+      <div class="form-group">
+        <label>Message Type</label>
+        <select id="contactType">
+          <option value="General Support">General Support (All Staff)</option>
+          <option value="Report Issue">Report an Issue (Moderators)</option>
+          <option value="Community Suggestion">Community Suggestion (Hosts)</option>
+          <option value="Admin Inquiry">Technical / Admin Inquiry (Admins)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Message</label>
+        <textarea id="contactMessage" placeholder="How can we help you today?"></textarea>
+      </div>
+      <button class="btn btn-primary" style="width:100%; padding:14px; justify-content:center; font-size:16px;" onclick="submitContact()">Send Message</button>
+    </div>
+  </section>
+
+  <!-- STAFF DASHBOARD -->
+  <section class="page" id="page-dashboard">
+    <div class="page-header">
+      <h2>Staff Portal</h2>
+      <p>Manage community safety, moderate posts, and review user inquiries.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3>Staff Overview</h3>
+        <p style="color:var(--ink-soft); line-height:1.6;">You are logged in with elevated privileges. From here you can monitor user reports and direct messages.</p>
+        <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><strong>Total Users:</strong> <span>10,492</span></div>
+        <div style="display:flex; justify-content:space-between;"><strong>System Status:</strong> <span style="color:#2E7D32;">Online</span></div>
+      </div>
+      <div class="dash-card">
+        <h3>Staff Inbox</h3>
+        <div class="inbox-list" id="inboxList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTH -->
+  <section class="page" id="page-auth">
+    <div class="auth-wrap">
+      <div class="auth-illustration">
+        <div class="brand-block" style="pointer-events:none;">
+          <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4 4 6 4 10a4 4 0 0 1-8 0c0-4 3-6 4-10z" stroke="currentColor" stroke-width="2" fill="currentColor"/></svg></span>
+          <div class="brand-text"><div class="brand">MINDORA</div></div>
+        </div>
+        <h1>Welcome to<br>Mindora</h1>
+        <p>Log in safely to continue your journey. Staff members can use the dedicated portal.</p>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+          <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+          <button class="auth-tab" id="tab-staff" onclick="switchAuthTab('staff')">Staff Portal</button>
+        </div>
+
+        <div class="auth-form active" id="form-login">
+          <h2>User Login</h2>
+          <div class="form-group" style="margin-top:24px;">
+            <label>Username</label>
+            <div class="input-wrap">
+              <span class="ic-left">👤</span>
+              <input type="text" id="loginUsername" placeholder="Enter your username">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="ic-left">🔒</span>
+              <input type="password" placeholder="Enter password (any will work)">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:16px;" onclick="handleAuthSubmit('login')">Login</button>
+        </div>
+
+        <div class="auth-form" id="form-signup">
+          <h2>Create account</h2>
+          <div class="form-group" style="margin-top:24px;">
+            <label>Choose a screen name</label>
+            <div class="input-wrap">
+              <span class="ic-left">👤</span>
+              <input type="text" id="signupUsername" placeholder="Anonymous_Traveler">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="ic-left">🔒</span>
+              <input type="password" placeholder="Enter password">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:16px;" onclick="handleAuthSubmit('signup')">Create Account</button>
+        </div>
+
+        <div class="auth-form" id="form-staff">
+          <h2>Staff Access</h2>
+          <p style="color:var(--ink-soft); font-size:13px; margin-bottom:24px;">Use <strong>Admin_Name</strong>, <strong>Host_Name</strong>, or <strong>Mod_Name</strong> to test role routing.</p>
+          <div class="form-group">
+            <label>Staff Username</label>
+            <div class="input-wrap">
+              <span class="ic-left">🛡️</span>
+              <input type="text" id="staffUsername" placeholder="Admin_Sarah">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Access Key</label>
+            <div class="input-wrap">
+              <span class="ic-left">🔑</span>
+              <input type="password" placeholder="Enter access key">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:16px; background:#111;" onclick="handleAuthSubmit('staff')">Secure Login</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // -- Environment Setup --
+  const API_URL = 'http://localhost:3000/api';
+  let currentUser = localStorage.getItem('mindora_user') || 'Anonymous';
+  let userRole = localStorage.getItem('mindora_role') || 'user';
+  let posts = [];
+  let staffInbox = [];
+  let localLikes = new Set(); // Track user's likes locally
+
+  // -- API Calls --
+  async function fetchPosts() {
+    try {
+      const res = await fetch(`${API_URL}/posts`);
+      if (res.ok) {
+        posts = await res.json();
+        renderPosts();
+      }
+    } catch(e) {
+      showToast('Could not connect to backend server.', '⚠️');
+    }
+  }
+
+  async function fetchInbox() {
+    if(userRole === 'user') return;
+    try {
+      const res = await fetch(`${API_URL}/contact`);
+      if (res.ok) {
+        staffInbox = await res.json();
+        renderInbox();
+      }
+    } catch(e) {}
+  }
+
+  async function submitPost() {
+    const text = document.getElementById('shareText').value.trim();
+    if(!text){ showToast('Write something before sharing.', '⚠️'); return; }
+    
+    const activeMoodNode = document.querySelector('.mood.selected');
+    const mood = activeMoodNode 
+      ? { name: activeMoodNode.dataset.mood, emoji: activeMoodNode.dataset.emoji } 
+      : { name: 'Shared', emoji: '✨' };
+
+    const payload = {
+      user: currentUser === 'Anonymous' ? 'Anonymous_' + Math.floor(Math.random() * 90 + 10) : currentUser,
+      role: userRole,
+      text: text,
+      mood: mood
+    };
+
+    try {
+      await fetch(`${API_URL}/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      document.getElementById('shareText').value = '';
+      document.getElementById('charCount').textContent = '0';
+      if(activeMoodNode) activeMoodNode.classList.remove('selected');
+      
+      showToast('Your thoughts have been shared securely.', '💜');
+      goTo('community');
+      fetchPosts();
+    } catch(e) { showToast('Error saving post.', '❌'); }
+  }
+
+  async function deletePost(postId) {
+    if(confirm('As a staff member, are you sure you want to remove this post?')){
+      try {
+        await fetch(`${API_URL}/posts/${postId}`, { method: 'DELETE' });
+        showToast('Post removed successfully.', '🗑️');
+        fetchPosts();
+      } catch(e) { showToast('Error removing post.', '❌'); }
+    }
+  }
+
+  async function toggleLike(postId) {
+    const isLiked = localLikes.has(postId);
+    try {
+      await fetch(`${API_URL}/posts/${postId}/like`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ increment: !isLiked })
+      });
+      isLiked ? localLikes.delete(postId) : localLikes.add(postId);
+      fetchPosts();
+    } catch(e) { showToast('Error updating like.', '❌'); }
+  }
+
+  async function submitContact() {
+    const type = document.getElementById('contactType').value;
+    const msg = document.getElementById('contactMessage').value.trim();
+    if(!msg){ showToast('Please enter a message to send.', '⚠️'); return; }
+    
+    try {
+      await fetch(`${API_URL}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: currentUser, type: type, text: msg })
+      });
+      document.getElementById('contactMessage').value = '';
+      goTo('home');
+      showToast('Your message has been sent to the staff safely.', '✉️');
+      fetchInbox();
+    } catch(e) { showToast('Error sending message.', '❌'); }
+  }
+
+  // -- UI Rendering --
+  function getBadgeHTML(role, name) {
+    if(role === 'admin') return `<span class="role-badge role-admin">👑 ADMIN</span> ${name}`;
+    if(role === 'host') return `<span class="role-badge role-host">✨ HOST</span> ${name}`;
+    if(role === 'mod') return `<span class="role-badge role-mod">🛡️ MOD</span> ${name}`;
+    return name;
+  }
+
+  function renderPosts() {
+    const list = document.getElementById('post-list');
+    if(!list) return;
+
+    const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+    const sort = document.getElementById('sortSelect')?.value || 'recent';
+
+    let result = posts.filter(p => 
+      p.text.toLowerCase().includes(q) || p.mood.name.toLowerCase().includes(q) || p.user.toLowerCase().includes(q)
+    );
+    result.sort((a,b) => sort === 'liked' ? b.likes - a.likes : b.id - a.id);
+
+    if(result.length === 0){
+      list.innerHTML = `<div style="text-align:center; padding:60px; color:var(--ink-soft); background:var(--panel); border-radius:20px; box-shadow:var(--shadow);">No posts match your search.</div>`;
+      return;
+    }
+
+    list.innerHTML = result.map((p, i) => `
+      <div class="post-card" style="animation-delay:${i * 0.05}s">
+        <div class="post-top">
+          <div class="post-user">
+            <div class="avatar" style="width:42px;height:42px;font-size:20px;box-shadow:none;">${p.mood.emoji}</div>
+            <div><div class="name">${getBadgeHTML(p.role, p.user)}</div><div class="time">${p.time}</div></div>
+          </div>
+          <span class="mood-tag">${p.mood.emoji} Feeling ${p.mood.name}</span>
+        </div>
+        <div class="post-text">${p.text}</div>
+        <div class="post-actions">
+          <div class="left">
+            <button class="stat-inline ${localLikes.has(p.id) ? 'liked' : ''}" onclick="toggleLike(${p.id})">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="${localLikes.has(p.id) ? 'currentColor' : 'none'}"><path d="M12 21s-7-4.5-9.5-9C.7 8.4 2 5 5.3 4.2 7.7 3.6 10 4.8 12 7c2-2.2 4.3-3.4 6.7-2.8C22 5 23.3 8.4 21.5 12 19 16.5 12 21 12 21z" stroke="currentColor" stroke-width="1.8"/></svg>
+              ${p.likes} Likes
+            </button>
+          </div>
+          ${['admin', 'host', 'mod'].includes(userRole) ? `<button class="btn-delete" onclick="deletePost(${p.id})">🗑️ Remove</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderInbox() {
+    const list = document.getElementById('inboxList');
+    if(!list) return;
+    
+    if(staffInbox.length === 0){
+      list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--ink-soft);">No new messages.</div>`;
+      return;
+    }
+
+    list.innerHTML = staffInbox.map(msg => `
+      <div class="inbox-item">
+        <div class="header">
+          <span>From: ${msg.sender}</span>
+          <span class="type">${msg.type}</span>
+        </div>
+        <p>${msg.text}</p>
+      </div>
+    `).join('');
+  }
+
+  // -- Navigation & Interactivity --
+  function goTo(pageId){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + pageId).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === pageId));
+    document.getElementById('navLinks').classList.remove('show');
+    window.scrollTo(0,0);
+  }
+
+  function showToast(msg, icon = '✨'){
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span style="font-size:18px;">${icon}</span> ${msg}`;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('fadeOut');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  document.querySelectorAll('.mood').forEach(m => {
+    m.addEventListener('click', () => {
+      document.querySelectorAll('.mood').forEach(x => x.classList.remove('selected'));
+      m.classList.add('selected');
+    });
+  });
+
+  // -- Auth Handling --
+  function switchAuthTab(tab){
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('form-' + tab).classList.add('active');
+  }
+
+  function determineRole(username) {
+    const lower = username.toLowerCase();
+    if(lower.includes('admin')) return 'admin';
+    if(lower.includes('host')) return 'host';
+    if(lower.includes('mod')) return 'mod';
+    return 'user';
+  }
+
+  function handleAuthSubmit(kind){
+    const val = document.getElementById(kind + 'Username').value.trim();
+    if(!val) { showToast('Please enter a username', '⚠️'); return; }
+    
+    currentUser = val;
+    userRole = determineRole(currentUser);
+    localStorage.setItem('mindora_user', currentUser);
+    localStorage.setItem('mindora_role', userRole);
+    
+    updateUserUI();
+    goTo('home');
+    
+    const welcomeIcon = userRole === 'admin' ? '👑' : userRole === 'host' ? '✨' : userRole === 'mod' ? '🛡️' : '👋';
+    showToast(`Welcome, ${currentUser}!`, welcomeIcon);
+  }
+
+  function updateUserUI(){
+    document.getElementById('currentUserLabel').innerHTML = getBadgeHTML(userRole, currentUser);
+    const authBtn = document.getElementById('authNavBtn');
+    const dashboardBtn = document.getElementById('navDashboard');
+    
+    if(['admin', 'host', 'mod'].includes(userRole)){
+      dashboardBtn.style.display = 'block';
+    } else {
+      dashboardBtn.style.display = 'none';
+      if(document.getElementById('page-dashboard').classList.contains('active')) goTo('home');
+    }
+    
+    if(currentUser !== 'Anonymous'){
+      authBtn.textContent = 'Logout';
+      authBtn.classList.replace('btn-primary', 'btn-outline');
+      authBtn.onclick = () => {
+        currentUser = 'Anonymous';
+        userRole = 'user';
+        localStorage.removeItem('mindora_user');
+        localStorage.removeItem('mindora_role');
+        updateUserUI();
+        showToast('Logged out successfully.', '👋');
+        goTo('home');
+      };
+    } else {
+      authBtn.textContent = 'Login';
+      authBtn.classList.replace('btn-outline', 'btn-primary');
+      authBtn.onclick = () => { goTo('auth'); switchAuthTab('login'); };
+    }
+    fetchPosts();
+    fetchInbox();
+  }
+
+  // Initialize
+  updateUserUI();
+</script>
 </body>
 </html>
