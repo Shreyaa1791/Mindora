@@ -4,7 +4,8 @@
   "description": "Mindora Web Application",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "render-postbuild": "npm install cors express"
   },
   "dependencies": {
     "cors": "^2.8.5",
