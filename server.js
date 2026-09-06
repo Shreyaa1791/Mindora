@@ -47,5 +47,5 @@ app.post('/api/contact', (req, res) => {
   res.json({ success: true });
 });
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Mindora backend running on http://localhost:${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Mindora backend running on port ${PORT}`));
