@@ -451,7 +451,33 @@
 </style>
 </head>
 <body>
+<!-- STAFF DASHBOARD -->
+  <!-- PRIVATE SUPPORT -->
+<section class="page" id="page-chat">
+  <div class="page-header">
+    <h2>Private Support</h2>
+    <p>Connect privately with the Mindora support team.</p>
+  </div>
 
+  <div class="chat-container">
+    <div class="chat-header">
+      <h3>Mindora Support ✨</h3>
+      <p>Your conversation is private to you and the support team.</p>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <div class="chat-input-area">
+      <input
+        id="chatInput"
+        class="chat-input"
+        placeholder="Type your message..."
+        onkeydown="if(event.key==='Enter') sendChatMessage()"
+      >
+      <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+    </div>
+  </div>
+</section>
 <div class="topbar">
   <div class="brand-block" onclick="goTo('home')">
     <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4 4 6 4 10a4 4 0 0 1-8 0c0-4 3-6 4-10z" stroke="currentColor" stroke-width="2" fill="currentColor"/></svg></span>
