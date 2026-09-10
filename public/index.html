@@ -451,63 +451,7 @@
 </style>
 </head>
 <body>
-  <!-- PRIVATE SUPPORT -->
-<section class="page" id="page-chat">
-  <div class="page-header">
-    <h2>Private Support</h2>
-    <p>Connect privately with the Mindora support team.</p>
-  </div>
-
-  <div class="chat-container">
-    <div class="chat-header">
-      <h3>Mindora Support ✨</h3>
-      <p>Your conversation is private to you and the support team.</p>
-    </div>
-
-    <div class="chat-messages" id="chatMessages"></div>
-
-    <div class="chat-input-area">
-      <input
-        id="chatInput"
-        class="chat-input"
-        placeholder="Type your message..."
-        onkeydown="if(event.key==='Enter') sendChatMessage()"
-      >
-      <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
-    </div>
-  </div>
-</section>
-<div class="topbar">
-  <div class="brand-block" onclick="goTo('home')">
-    <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4 4 6 4 10a4 4 0 0 1-8 0c0-4 3-6 4-10z" stroke="currentColor" stroke-width="2" fill="currentColor"/></svg></span>
-    <div class="brand-text">
-      <div class="brand">MINDORA</div>
-      <div class="tag">Your Mind Matters</div>
-    </div>
-  </div>
-
-  <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
-
-  <ul class="nav-links" id="navLinks">
-    <li><button class="nav-btn active" data-page="home">Home</button></li>
-    <li><button class="nav-btn" data-page="community">Community</button></li>
-    <li><button class="nav-btn" data-page="share">Write a Post</button></li>
-    <li><button class="nav-btn" data-page="contact">Contact Us</button></li>
-    <li><button class="nav-btn" data-page="dashboard" id="navDashboard">🛡️ Staff Portal</button></li>
-  </ul>
-
-  <div class="nav-right">
-    <button class="btn btn-outline" id="authNavBtn" onclick="goTo('auth'); switchAuthTab('login')">Login</button>
-    <div class="user-chip">
-      <div class="avatar">🙂</div>
-      <div style="display:flex; flex-direction:column; line-height:1.2;">
-        <span id="currentUserLabel">Anonymous</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<main>
+  
   <!-- HOME -->
   <section class="page active" id="page-home">
     <div class="hero">
@@ -589,7 +533,63 @@
       <button class="btn btn-primary" style="width:100%; padding:14px; justify-content:center; font-size:16px;" onclick="submitContact()">Send Message</button>
     </div>
   </section>
+<!-- PRIVATE SUPPORT -->
+<section class="page" id="page-chat">
+  <div class="page-header">
+    <h2>Private Support</h2>
+    <p>Connect privately with the Mindora support team.</p>
+  </div>
 
+  <div class="chat-container">
+    <div class="chat-header">
+      <h3>Mindora Support ✨</h3>
+      <p>Your conversation is private to you and the support team.</p>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <div class="chat-input-area">
+      <input
+        id="chatInput"
+        class="chat-input"
+        placeholder="Type your message..."
+        onkeydown="if(event.key==='Enter') sendChatMessage()"
+      >
+      <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+    </div>
+  </div>
+</section>
+<div class="topbar">
+  <div class="brand-block" onclick="goTo('home')">
+    <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4 4 6 4 10a4 4 0 0 1-8 0c0-4 3-6 4-10z" stroke="currentColor" stroke-width="2" fill="currentColor"/></svg></span>
+    <div class="brand-text">
+      <div class="brand">MINDORA</div>
+      <div class="tag">Your Mind Matters</div>
+    </div>
+  </div>
+
+  <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><button class="nav-btn active" data-page="home">Home</button></li>
+    <li><button class="nav-btn" data-page="community">Community</button></li>
+    <li><button class="nav-btn" data-page="share">Write a Post</button></li>
+    <li><button class="nav-btn" data-page="contact">Contact Us</button></li>
+    <li><button class="nav-btn" data-page="dashboard" id="navDashboard">🛡️ Staff Portal</button></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="btn btn-outline" id="authNavBtn" onclick="goTo('auth'); switchAuthTab('login')">Login</button>
+    <div class="user-chip">
+      <div class="avatar">🙂</div>
+      <div style="display:flex; flex-direction:column; line-height:1.2;">
+        <span id="currentUserLabel">Anonymous</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
   <!-- STAFF DASHBOARD -->
   <section class="page" id="page-dashboard">
     <div class="page-header">
