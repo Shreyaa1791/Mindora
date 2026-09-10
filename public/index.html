@@ -526,101 +526,205 @@
   let localLikes = new Set(); // Track user's likes locally
 
   // -- API Calls --
-  async function fetchPosts() {
-    try {
-      const res = await fetch(`${API_URL}/posts`);
-      if (res.ok) {
-        posts = await res.json();
-        renderPosts();
-      }
-    } catch(e) {
-      showToast('Could not connect to backend server.', '⚠️');
+async function fetchPosts() {
+  try {
+    const res = await fetch(`${API_URL}/posts`);
+
+    if (!res.ok) {
+      throw new Error('Failed to load posts');
     }
+
+    posts = await res.json();
+    renderPosts();
+
+  } catch (e) {
+    console.error(e);
+    showToast('Could not load the community feed.', '⚠️');
+  }
+}
+
+
+async function fetchInbox() {
+  if (userRole === 'user') return;
+
+  try {
+    const res = await fetch(`${API_URL}/contact`, {
+      credentials: 'include'
+    });
+
+    if (!res.ok) return;
+
+    staffInbox = await res.json();
+    renderInbox();
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+async function submitPost() {
+  const text = document.getElementById('shareText').value.trim();
+
+  if (!text) {
+    showToast('Write something before sharing.', '⚠️');
+    return;
   }
 
-  async function fetchInbox() {
-    if(userRole === 'user') return;
-    try {
-      const res = await fetch(`${API_URL}/contact`);
-      if (res.ok) {
-        staffInbox = await res.json();
-        renderInbox();
+  const activeMoodNode = document.querySelector('.mood.selected');
+
+  const mood = activeMoodNode
+    ? {
+        name: activeMoodNode.dataset.mood,
+        emoji: activeMoodNode.dataset.emoji
       }
-    } catch(e) {}
-  }
+    : {
+        name: 'Shared',
+        emoji: '✨'
+      };
 
-  async function submitPost() {
-    const text = document.getElementById('shareText').value.trim();
-    if(!text){ showToast('Write something before sharing.', '⚠️'); return; }
-    
-    const activeMoodNode = document.querySelector('.mood.selected');
-    const mood = activeMoodNode 
-      ? { name: activeMoodNode.dataset.mood, emoji: activeMoodNode.dataset.emoji } 
-      : { name: 'Shared', emoji: '✨' };
+  try {
+    const res = await fetch(`${API_URL}/posts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        text: text,
+        mood: mood
+      })
+    });
 
-    const payload = {
-      user: currentUser === 'Anonymous' ? 'Anonymous_' + Math.floor(Math.random() * 90 + 10) : currentUser,
-      role: userRole,
-      text: text,
-      mood: mood
-    };
+    const data = await res.json();
 
-    try {
-      await fetch(`${API_URL}/posts`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      document.getElementById('shareText').value = '';
-      document.getElementById('charCount').textContent = '0';
-      if(activeMoodNode) activeMoodNode.classList.remove('selected');
-      
-      showToast('Your thoughts have been shared securely.', '💜');
-      goTo('community');
-      fetchPosts();
-    } catch(e) { showToast('Error saving post.', '❌'); }
-  }
-
-  async function deletePost(postId) {
-    if(confirm('As a staff member, are you sure you want to remove this post?')){
-      try {
-        await fetch(`${API_URL}/posts/${postId}`, { method: 'DELETE' });
-        showToast('Post removed successfully.', '🗑️');
-        fetchPosts();
-      } catch(e) { showToast('Error removing post.', '❌'); }
+    if (!res.ok) {
+      showToast(data.message || 'Could not save your post.', '❌');
+      return;
     }
+
+    document.getElementById('shareText').value = '';
+    document.getElementById('charCount').textContent = '0';
+
+    if (activeMoodNode) {
+      activeMoodNode.classList.remove('selected');
+    }
+
+    showToast('Your thoughts have been shared securely.', '✨');
+
+    goTo('community');
+    fetchPosts();
+
+  } catch (e) {
+    console.error(e);
+    showToast('Error connecting to Mindora.', '❌');
+  }
+}
+
+
+async function deletePost(postId) {
+  if (!confirm('As a staff member, are you sure you want to remove this post?')) {
+    return;
   }
 
-  async function toggleLike(postId) {
-    const isLiked = localLikes.has(postId);
-    try {
-      await fetch(`${API_URL}/posts/${postId}/like`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ increment: !isLiked })
-      });
-      isLiked ? localLikes.delete(postId) : localLikes.add(postId);
-      fetchPosts();
-    } catch(e) { showToast('Error updating like.', '❌'); }
+  try {
+    const res = await fetch(`${API_URL}/posts/${postId}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.message || 'You cannot delete this post.', '❌');
+      return;
+    }
+
+    showToast('Post removed successfully.', '🗑️');
+    fetchPosts();
+
+  } catch (e) {
+    console.error(e);
+    showToast('Error removing post.', '❌');
+  }
+}
+
+
+async function toggleLike(postId) {
+  const post = posts.find(p => p.id === postId);
+  const isLiked = post && post.liked === true;
+
+  try {
+    const res = await fetch(`${API_URL}/posts/${postId}/like`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        increment: !isLiked
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.message || 'Please log in to like posts.', '⚠️');
+      return;
+    }
+
+    fetchPosts();
+
+  } catch (e) {
+    console.error(e);
+    showToast('Error updating like.', '❌');
+  }
+}
+
+
+async function submitContact() {
+  const type = document.getElementById('contactType').value;
+  const msg = document.getElementById('contactMessage').value.trim();
+
+  if (!msg) {
+    showToast('Please enter a message to send.', '⚠️');
+    return;
   }
 
-  async function submitContact() {
-    const type = document.getElementById('contactType').value;
-    const msg = document.getElementById('contactMessage').value.trim();
-    if(!msg){ showToast('Please enter a message to send.', '⚠️'); return; }
-    
-    try {
-      await fetch(`${API_URL}/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sender: currentUser, type: type, text: msg })
-      });
-      document.getElementById('contactMessage').value = '';
-      goTo('home');
-      showToast('Your message has been sent to the staff safely.', '✉️');
-      fetchInbox();
-    } catch(e) { showToast('Error sending message.', '❌'); }
+  try {
+    const res = await fetch(`${API_URL}/contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        type: type,
+        text: msg
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.message || 'Could not send your message.', '❌');
+      return;
+    }
+
+    document.getElementById('contactMessage').value = '';
+
+    goTo('home');
+
+    showToast(
+      'Your message has been sent to the staff safely.',
+      '✉️'
+    );
+
+  } catch (e) {
+    console.error(e);
+    showToast('Error connecting to Mindora.', '❌');
   }
+}
 
   // -- UI Rendering --
   function getBadgeHTML(role, name) {
