@@ -295,6 +295,131 @@
     .auth-wrap{grid-template-columns:1fr;border-radius:20px;}
     .auth-illustration,.auth-panel{padding:30px 24px;}
   }
+  /* ===== PRIVATE STAFF CHAT ===== */
+
+.chat-container {
+  max-width: 700px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  border: 1px solid #ead9dd;
+}
+
+.chat-header {
+  background: #7A1B3D;
+  color: white;
+  padding: 18px 20px;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.chat-header p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.chat-messages {
+  height: 360px;
+  overflow-y: auto;
+  padding: 20px;
+  background: #FDF4F1;
+}
+
+.chat-message {
+  max-width: 75%;
+  padding: 11px 14px;
+  margin-bottom: 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.chat-message.user {
+  margin-left: auto;
+  background: #7A1B3D;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-message.staff {
+  margin-right: auto;
+  background: white;
+  color: #2B1A22;
+  border: 1px solid #ead9dd;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-time {
+  display: block;
+  font-size: 10px;
+  opacity: 0.65;
+  margin-top: 4px;
+}
+
+.chat-input-area {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  background: white;
+  border-top: 1px solid #ead9dd;
+}
+
+.chat-input {
+  flex: 1;
+  border: 1px solid #d9c3c9;
+  border-radius: 12px;
+  padding: 12px;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.chat-send-btn {
+  background: #7A1B3D;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.chat-send-btn:hover {
+  background: #5E1530;
+}
+
+.staff-chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.staff-chat-user {
+  padding: 14px;
+  background: white;
+  border: 1px solid #ead9dd;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.staff-chat-user:hover {
+  background: #F6D9DD;
+}
+
+.unread-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: #C2687A;
+  border-radius: 50%;
+  margin-left: 6px;
+}
 </style>
 </head>
 <body>
