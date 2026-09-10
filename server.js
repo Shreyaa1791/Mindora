@@ -40,11 +40,74 @@ app.put('/api/posts/:id/like', (req, res) => {
 });
 
 // --- Contact & Inbox API ---
-app.get('/api/contact', (req, res) => res.json(staffInbox));
+// --- Chat & Staff Inbox API ---
 
-app.post('/api/contact', (req, res) => {
-  staffInbox.unshift({ id: Date.now(), ...req.body });
-  res.json({ success: true });
+let messages = [];
+
+// Get messages for ONE user
+app.get('/api/chat/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+  const userMessages = messages.filter(
+    message => message.userId === userId
+  );
+
+  res.json(userMessages);
+});
+
+// User sends a message
+app.post('/api/chat/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const { text } = req.body;
+
+  if (!text || !text.trim()) {
+    return res.status(400).json({
+      message: 'Message cannot be empty.'
+    });
+  }
+
+  const message = {
+    id: Date.now(),
+    userId: userId,
+    sender: 'user',
+    text: text.trim(),
+    time: new Date().toISOString(),
+    read: false
+  };
+
+  messages.push(message);
+
+  res.json(message);
+});
+
+// Staff gets ALL conversations
+app.get('/api/staff/chats', (req, res) => {
+  res.json(messages);
+});
+
+// Staff replies to a specific user
+app.post('/api/staff/chat/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const { text } = req.body;
+
+  if (!text || !text.trim()) {
+    return res.status(400).json({
+      message: 'Message cannot be empty.'
+    });
+  }
+
+  const message = {
+    id: Date.now(),
+    userId: userId,
+    sender: 'staff',
+    text: text.trim(),
+    time: new Date().toISOString(),
+    read: false
+  };
+
+  messages.push(message);
+
+  res.json(message);
 });
 
 const PORT = process.env.PORT || 3000;
