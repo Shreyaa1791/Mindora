@@ -1283,7 +1283,37 @@ async function openStaffConversation(userId) {
 
 
 // Staff sends reply
-async function sendStaffReply() {
+  async function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  try {
+    const res = await fetch(`${API_URL}/api/chat/${chatUserId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: text })
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      console.error('Chat error:', error);
+      showToast('Could not send message.', '❌');
+      return;
+    }
+
+    input.value = '';
+    await loadUserChat();
+
+  } catch (e) {
+    console.error('Chat connection error:', e);
+    showToast('Error connecting to staff chat.', '❌');
+  }
+}
   if (!selectedChatUser) return;
 
   const input = document.getElementById('staffChatInput');
