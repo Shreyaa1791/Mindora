@@ -1041,6 +1041,286 @@ async function submitContact() {
 
   // Initialize
   updateUserUI();
+// ===== PRIVATE STAFF CHAT =====
+
+let chatUserId = localStorage.getItem('mindora_chat_user_id');
+
+if (!chatUserId) {
+  chatUserId = 'user_' + Math.random().toString(36).substring(2, 10);
+  localStorage.setItem('mindora_chat_user_id', chatUserId);
+}
+
+let selectedChatUser = null;
+
+// Add Chat button to navigation
+const chatNav = document.createElement('button');
+chatNav.className = 'nav-btn';
+chatNav.dataset.page = 'chat';
+chatNav.textContent = 'Talk to Staff';
+chatNav.onclick = () => {
+  goTo('chat');
+  loadUserChat();
+};
+
+const navLinks = document.getElementById('navLinks');
+if (navLinks) navLinks.appendChild(chatNav);
+
+
+// Load user's private chat
+async function loadUserChat() {
+  const box = document.getElementById('chatMessages');
+  if (!box) return;
+
+  try {
+    const res = await fetch(`${API_URL}/api/chat/${chatUserId}`);
+    const messages = await res.json();
+
+    if (messages.length === 0) {
+      box.innerHTML = `
+        <div class="chat-message staff">
+          Hi! How can we help you today? ✨
+          <span class="chat-time">Mindora Staff</span>
+        </div>
+      `;
+      return;
+    }
+
+    box.innerHTML = messages.map(m => `
+      <div class="chat-message ${m.sender}">
+        ${escapeChatText(m.text)}
+        <span class="chat-time">
+          ${m.sender === 'staff' ? 'Mindora Staff' : 'You'}
+        </span>
+      </div>
+    `).join('');
+
+    box.scrollTop = box.scrollHeight;
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+// Send user message
+async function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  try {
+    const res = await fetch(`${API_URL}/api/chat/${chatUserId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text })
+    });
+
+    if (!res.ok) {
+      showToast('Could not send message.', '❌');
+      return;
+    }
+
+    input.value = '';
+    await loadUserChat();
+
+  } catch (e) {
+    console.error(e);
+    showToast('Error connecting to staff chat.', '❌');
+  }
+}
+
+
+// Staff chat panel
+function createStaffChatPanel() {
+  const dashboard = document.getElementById('page-dashboard');
+
+  if (!dashboard || document.getElementById('staffChatPanel')) return;
+
+  const panel = document.createElement('div');
+  panel.id = 'staffChatPanel';
+  panel.className = 'dash-card';
+  panel.style.marginTop = '20px';
+
+  panel.innerHTML = `
+    <h3>Private User Chats</h3>
+    <div id="staffChatUsers" class="staff-chat-list"></div>
+
+    <div id="staffConversation" style="display:none;">
+      <div class="chat-container">
+        <div class="chat-header">
+          <h3 id="staffChatTitle">User Conversation</h3>
+          <p>Private conversation with this user.</p>
+        </div>
+
+        <div class="chat-messages" id="staffMessages"></div>
+
+        <div class="chat-input-area">
+          <input
+            id="staffChatInput"
+            class="chat-input"
+            placeholder="Reply to user..."
+            onkeydown="if(event.key==='Enter') sendStaffReply()"
+          >
+          <button class="chat-send-btn" onclick="sendStaffReply()">Send</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  dashboard.appendChild(panel);
+  loadStaffChats();
+}
+
+
+// Load all staff conversations
+async function loadStaffChats() {
+  if (!['admin', 'host', 'mod'].includes(userRole)) return;
+
+  try {
+    const res = await fetch(`${API_URL}/api/staff/chats`);
+    const messages = await res.json();
+
+    const users = {};
+
+    messages.forEach(m => {
+      if (!users[m.userId]) users[m.userId] = [];
+      users[m.userId].push(m);
+    });
+
+    const list = document.getElementById('staffChatUsers');
+    if (!list) return;
+
+    const ids = Object.keys(users);
+
+    if (ids.length === 0) {
+      list.innerHTML = `
+        <div style="padding:15px;color:var(--ink-soft);">
+          No private conversations yet.
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = ids.map(id => {
+      const msgs = users[id];
+      const unread = msgs.filter(m => m.sender === 'user' && !m.read).length;
+
+      return `
+        <div class="staff-chat-user" onclick="openStaffConversation('${id}')">
+          <strong>Anonymous User</strong>
+          ${unread ? `<span class="unread-dot"></span><small> ${unread} new</small>` : ''}
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">
+            ${escapeChatText(msgs[msgs.length - 1].text).substring(0, 60)}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+// Open one user's conversation
+async function openStaffConversation(userId) {
+  selectedChatUser = userId;
+
+  document.getElementById('staffConversation').style.display = 'block';
+  document.getElementById('staffChatTitle').textContent =
+    'Anonymous User';
+
+  try {
+    const res = await fetch(`${API_URL}/api/chat/${userId}`);
+    const messages = await res.json();
+
+    const box = document.getElementById('staffMessages');
+
+    box.innerHTML = messages.map(m => `
+      <div class="chat-message ${m.sender}">
+        ${escapeChatText(m.text)}
+        <span class="chat-time">
+          ${m.sender === 'staff' ? 'You — Staff' : 'User'}
+        </span>
+      </div>
+    `).join('');
+
+    box.scrollTop = box.scrollHeight;
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+// Staff sends reply
+async function sendStaffReply() {
+  if (!selectedChatUser) return;
+
+  const input = document.getElementById('staffChatInput');
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  try {
+    const res = await fetch(
+      `${API_URL}/api/staff/chat/${selectedChatUser}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text })
+      }
+    );
+
+    if (!res.ok) {
+      showToast('Could not send reply.', '❌');
+      return;
+    }
+
+    input.value = '';
+
+    await openStaffConversation(selectedChatUser);
+    await loadStaffChats();
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+// Prevent messages from injecting HTML
+function escapeChatText(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+
+// Start staff panel
+setTimeout(() => {
+  createStaffChatPanel();
+}, 500);
+
+
+// Refresh chats every 3 seconds
+setInterval(() => {
+  if (document.getElementById('page-chat')?.classList.contains('active')) {
+    loadUserChat();
+  }
+
+  if (
+    document.getElementById('page-dashboard')?.classList.contains('active') &&
+    ['admin', 'host', 'mod'].includes(userRole)
+  ) {
+    loadStaffChats();
+  }
+}, 3000);
+  
 </script>
 </body>
 </html>
