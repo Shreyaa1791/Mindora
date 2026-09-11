@@ -536,24 +536,6 @@
     </div>
   </section>
 
-  <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
-<ul class="nav-links" id="navLinks">
-  <li><button class="nav-btn active" data-page="home">Home</button></li>
-  <li><button class="nav-btn" data-page="community">Community</button></li>
-  <li><button class="nav-btn" data-page="chat" onclick="goTo('chat'); loadUserChat();">Chat</button></li>
-  <li><button class="nav-btn" data-page="dashboard" id="navDashboard">🛡️ Staff Portal</button></li>
-</ul>
-  <div class="nav-right">
-    <button class="btn btn-outline" id="authNavBtn" onclick="goTo('auth'); switchAuthTab('login')">Login</button>
-    <div class="user-chip">
-      <div class="avatar">🙂</div>
-      <div style="display:flex; flex-direction:column; line-height:1.2;">
-        <span id="currentUserLabel">Anonymous</span>
-      </div>
-    </div>
-  </div>
-</div>
-
 <main>
   <!-- STAFF DASHBOARD -->
   <section class="page" id="page-dashboard">
