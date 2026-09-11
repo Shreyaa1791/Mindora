@@ -1095,7 +1095,7 @@ async function sendChatMessage() {
   if (!text) return;
 
   try {
-    const res = await fetch(`${API_URL}/api/chat/${chatUserId}`, {
+    const res = await fetch(`${API_URL}/chat/${chatUserId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
