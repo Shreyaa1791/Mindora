@@ -1102,12 +1102,12 @@ async function sendChatMessage() {
       },
       body: JSON.stringify({ text })
     });
-
     if (!res.ok) {
-      showToast('Could not send message.', '❌');
-      return;
+  const errorText = await res.text();
+  console.log('CHAT ERROR:', res.status, errorText);
+  showToast(`Error ${res.status}`, '❌');
+  return;
     }
-
     input.value = '';
     await loadUserChat();
 
