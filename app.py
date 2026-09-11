@@ -631,3 +631,56 @@ if __name__ == "__main__":
         port=port,
         debug=False
     )
+    # ===== CHAT =====
+
+messages = []
+
+@app.route('/api/chat/<user_id>', methods=['GET'])
+def get_user_chat(user_id):
+    user_messages = [
+        message for message in messages
+        if message['userId'] == user_id
+    ]
+    return jsonify(user_messages)
+
+
+@app.route('/api/chat/<user_id>', methods=['POST'])
+def send_user_chat(user_id):
+    data = request.get_json() or {}
+    text = data.get('text', '').strip()
+
+    if not text:
+        return jsonify({'message': 'Message cannot be empty.'}), 400
+
+    message = {
+        'id': len(messages) + 1,
+        'userId': user_id,
+        'sender': 'user',
+        'text': text,
+        'time': datetime.now().isoformat(),
+        'read': False
+    }
+
+    messages.append(message)
+    return jsonify(message)
+
+
+@app.route('/api/staff/chat/<user_id>', methods=['POST'])
+def staff_reply(user_id):
+    data = request.get_json() or {}
+    text = data.get('text', '').strip()
+
+    if not text:
+        return jsonify({'message': 'Message cannot be empty.'}), 400
+
+    message = {
+        'id': len(messages) + 1,
+        'userId': user_id,
+        'sender': 'staff',
+        'text': text,
+        'time': datetime.now().isoformat(),
+        'read': False
+    }
+
+    messages.append(message)
+    return jsonify(message)
