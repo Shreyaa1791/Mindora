@@ -1108,7 +1108,17 @@ async function sendChatMessage() {
   return;
     }
     input.value = '';
-    await loadUserChat();
+
+const box = document.getElementById('chatMessages');
+
+box.innerHTML += `
+  <div class="chat-message user">
+    ${escapeChatText(text)}
+    <span class="chat-time">You</span>
+  </div>
+`;
+
+box.scrollTop = box.scrollHeight;
 
   } catch (e) {
     console.error(e);
