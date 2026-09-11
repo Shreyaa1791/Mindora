@@ -1255,12 +1255,11 @@ async function openStaffConversation(userId) {
 }
 
 
-// Staff sends reply
-  async function sendChatMessage() {
+// Send user message
+async function sendChatMessage() {
   const input = document.getElementById('chatInput');
-  if (!input) return;
-
   const text = input.value.trim();
+
   if (!text) return;
 
   try {
@@ -1269,12 +1268,10 @@ async function openStaffConversation(userId) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ text: text })
+      body: JSON.stringify({ text })
     });
 
     if (!res.ok) {
-      const error = await res.text();
-      console.error('Chat error:', error);
       showToast('Could not send message.', '❌');
       return;
     }
@@ -1283,15 +1280,20 @@ async function openStaffConversation(userId) {
     await loadUserChat();
 
   } catch (e) {
-    console.error('Chat connection error:', e);
+    console.error(e);
     showToast('Error connecting to staff chat.', '❌');
   }
 }
+
+
+// Staff sends reply
+async function sendStaffReply() {
   if (!selectedChatUser) return;
 
   const input = document.getElementById('staffChatInput');
-  const text = input.value.trim();
+  if (!input) return;
 
+  const text = input.value.trim();
   if (!text) return;
 
   try {
@@ -1318,6 +1320,7 @@ async function openStaffConversation(userId) {
 
   } catch (e) {
     console.error(e);
+    showToast('Error sending staff reply.', '❌');
   }
 }
 
