@@ -1050,21 +1050,7 @@ if (!chatUserId) {
 }
 
 let selectedChatUser = null;
-
-// Add Chat button to navigation
-const chatNav = document.createElement('button');
-chatNav.className = 'nav-btn';
-chatNav.dataset.page = 'chat';
-chatNav.textContent = 'Chat';
-chatNav.onclick = () => {
-  goTo('chat');
-  loadUserChat();
-};
-
-const navLinks = document.getElementById('navLinks');
-if (navLinks) navLinks.appendChild(chatNav);
-
-
+  
 // Load user's private chat
 async function loadUserChat() {
   const box = document.getElementById('chatMessages');
