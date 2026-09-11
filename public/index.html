@@ -1352,7 +1352,41 @@ setInterval(() => {
     loadStaffChats();
   }
 }, 3000);
-  
+  // ===== FIX NAVIGATION LAYOUT =====
+document.addEventListener('DOMContentLoaded', () => {
+  const topbar = document.querySelector('.topbar');
+  const mains = document.querySelectorAll('main');
+  const main = mains[0];
+  const extraMain = mains[1];
+
+  if (!topbar || !main) return;
+
+  // Move navigation back into the top bar
+  const mobileMenu = main.querySelector('.mobile-menu-btn');
+  const navLinks = main.querySelector('#navLinks');
+  const navRight = main.querySelector('.nav-right');
+
+  if (mobileMenu) topbar.appendChild(mobileMenu);
+  if (navLinks) topbar.appendChild(navLinks);
+  if (navRight) topbar.appendChild(navRight);
+
+  // Combine the two <main> sections into one
+  if (extraMain) {
+    while (extraMain.firstElementChild) {
+      main.appendChild(extraMain.firstElementChild);
+    }
+    extraMain.remove();
+  }
+
+  // Remove duplicate "Talk to Staff" button
+  if (navLinks) {
+    navLinks.querySelectorAll('.nav-btn').forEach(btn => {
+      if (btn.textContent.trim() === 'Talk to Staff') {
+        btn.remove();
+      }
+    });
+  }
+});
 </script>
 </body>
 </html>
