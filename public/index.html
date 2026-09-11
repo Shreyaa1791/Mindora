@@ -1283,7 +1283,7 @@ async function sendStaffReply() {
 
   try {
     const res = await fetch(
-      `${API_URL}/api/staff/chat/${selectedChatUser}`,
+      `${API_URL}/staff/chat/${selectedChatUser}`,
       {
         method: 'POST',
         headers: {
