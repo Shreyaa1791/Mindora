@@ -473,7 +473,7 @@ def delete_post(post_id):
 
 @app.put("/api/posts/<int:post_id>/like")
 def like_post(post_id):
-    username = current_username() or request.get_json().get("username")
+    username = current_username() 
 
 if not username:
     return jsonify({
