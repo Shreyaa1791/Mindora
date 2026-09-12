@@ -473,13 +473,13 @@ def delete_post(post_id):
 
 @app.put("/api/posts/<int:post_id>/like")
 def like_post(post_id):
-    username = current_username() 
+    username = current_username()
 
-if not username:
-    return jsonify({
-        "success": False,
-        "message": "Please log in to like posts."
-    }), 401
+    if not username:
+        return jsonify({
+            "success": False,
+            "message": "Please log in to like posts."
+        }), 401
 
     data = request.get_json() or {}
     increment = bool(data.get("increment"))
