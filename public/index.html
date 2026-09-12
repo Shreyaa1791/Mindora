@@ -1269,7 +1269,7 @@ async function openStaffConversation(userId) {
       <div class="chat-message ${m.sender}">
         ${escapeChatText(m.text)}
         <span class="chat-time">
-          ${m.sender === 'staff' ? 'You — Staff' : 'User'}
+          ${m.sender === 'staff' ? 'Staff' : 'User'}
         </span>
       </div>
     `).join('');
