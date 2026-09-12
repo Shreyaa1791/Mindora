@@ -1087,7 +1087,7 @@ async function loadUserChat() {
   if (!box) return;
 
   try {
-    const res = await fetch(`${API_URL}/api/chat/${chatUserId}`);
+    const res = await fetch(`${API_URL}/chat/${chatUserId}`);
     const messages = await res.json();
 
     if (messages.length === 0) {
