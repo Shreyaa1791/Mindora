@@ -453,6 +453,25 @@
   border-radius: 50%;
   margin-left: 6px;
 }
+  .about-mindora-intro {
+    background: #FDF4F1;
+    padding: 20px 24px;
+    border-radius: 14px;
+    margin-bottom: 35px;
+    line-height: 1.6;
+}
+
+.psychologists-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 900px) {
+    .psychologists-grid {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 </head>
 <body>
@@ -567,6 +586,190 @@
   </section>
 
 <main>
+  <!-- ABOUT & PSYCHOLOGISTS -->
+<section id="about" class="content-section hidden">
+
+    <!-- ABOUT MINDORA -->
+    <div class="section-heading">
+        <div>
+            <h2>About Mindora</h2>
+            <p>A safe space to be heard, understood and supported.</p>
+        </div>
+    </div>
+
+    <div class="about-mindora-intro">
+        <p>
+            Mindora is a safe and supportive platform where people can
+            express their thoughts without fear of judgment.
+            We believe everyone deserves to be heard, understood and supported.
+        </p>
+
+        <p>
+            Our goal is to make mental-health support more accessible
+            while respecting the privacy and anonymity of our users.
+        </p>
+    </div>
+
+    <!-- PSYCHOLOGISTS -->
+    <div class="section-heading">
+        <div>
+            <h2>Our Psychologists</h2>
+            <p>Connect with a professional for guidance and support.</p>
+        </div>
+    </div>
+
+    <div class="psychologists-grid">
+
+        <!-- DR SAMARTH DUBEY -->
+        <div class="psychologist-about-card">
+
+            <div class="psychologist-profile-header">
+                <div class="psychologist-photo">SD</div>
+
+                <div class="psychologist-basic-info">
+                    <h2>Dr. Samarth Dubey</h2>
+                    <p class="designation">Clinical Psychologist</p>
+                    <p class="verified">✓ Demo Profile</p>
+                </div>
+            </div>
+
+            <div class="professional-details">
+
+                <div class="detail-box">
+                    <span class="detail-icon">🎓</span>
+                    <div>
+                        <h4>Qualification</h4>
+                        <p>M.Phil. in Clinical Psychology</p>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-icon">💼</span>
+                    <div>
+                        <h4>Experience</h4>
+                        <p>7+ Years</p>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-icon">🧠</span>
+                    <div>
+                        <h4>Specialization</h4>
+                        <p>Stress, Anxiety & Student Well-being</p>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-icon">🌐</span>
+                    <div>
+                        <h4>Languages</h4>
+                        <p>English & Hindi</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="about-description">
+                <h3>About</h3>
+                <p>
+                    Focuses on helping individuals manage stress,
+                    understand emotions and develop healthy coping strategies.
+                </p>
+            </div>
+
+            <div class="availability-section">
+                <div>
+                    <h3>Available Slots</h3>
+                    <p>Monday – Friday</p>
+                    <p>11:00 AM – 5:00 PM</p>
+                </div>
+
+                <div class="available-status">
+                    ● Available
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Request Session</button>
+
+        </div>
+
+
+        <!-- DR ANANYA SHARMA -->
+        <div class="psychologist-about-card">
+
+            <div class="psychologist-profile-header">
+                <div class="psychologist-photo">AS</div>
+
+                <div class="psychologist-basic-info">
+                    <h2>Dr. Ananya Sharma</h2>
+                    <p class="designation">Clinical Psychologist</p>
+                    <p class="verified">✓ Demo Profile</p>
+                </div>
+            </div>
+
+            <div class="professional-details">
+
+                <div class="detail-box">
+                    <span class="detail-icon">🎓</span>
+                    <div>
+                        <h4>Qualification</h4>
+                        <p>M.Phil. in Clinical Psychology</p>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-icon">💼</span>
+                    <div>
+                        <h4>Experience</h4>
+                        <p>8+ Years</p>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-icon">🧠</span>
+                    <div>
+                        <h4>Specialization</h4>
+                        <p>Anxiety, Stress & Emotional Well-being</p>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-icon">🌐</span>
+                    <div>
+                        <h4>Languages</h4>
+                        <p>English & Hindi</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="about-description">
+                <h3>About</h3>
+                <p>
+                    Uses a compassionate, client-centered approach to
+                    support individuals dealing with stress and anxiety.
+                </p>
+            </div>
+
+            <div class="availability-section">
+                <div>
+                    <h3>Available Slots</h3>
+                    <p>Monday – Saturday</p>
+                    <p>10:00 AM – 6:00 PM</p>
+                </div>
+
+                <div class="available-status">
+                    ● Available
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Request Session</button>
+
+        </div>
+
+    </div>
+
+</section>
   <!-- STAFF DASHBOARD -->
   <section class="page" id="page-dashboard">
     <div class="page-header">
