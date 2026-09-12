@@ -472,6 +472,190 @@
         grid-template-columns: 1fr;
     }
 }
+  /* ===== ABOUT MINDORA ===== */
+
+.about-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 70px;
+}
+
+.about-hero {
+    background: linear-gradient(135deg, #FDF4F1, #F6D9DD);
+    border-radius: 24px;
+    padding: 50px;
+    margin-bottom: 60px;
+    border: 1px solid #ead9dd;
+}
+
+.about-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #7A1B3D;
+    margin-bottom: 12px;
+}
+
+.about-hero h1 {
+    font-size: 42px;
+    margin: 5px 0 18px;
+    color: #5E1530;
+}
+
+.about-hero p {
+    max-width: 800px;
+    line-height: 1.7;
+    color: #4a343c;
+    margin: 8px 0;
+}
+
+.psychologist-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.psychologist-heading h2 {
+    font-size: 32px;
+    color: #5E1530;
+    margin: 5px 0 10px;
+}
+
+.psychologist-heading p {
+    color: #765d65;
+}
+
+.psychologists-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.professional-card {
+    background: white;
+    border: 1px solid #ead9dd;
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(94, 21, 48, 0.07);
+}
+
+.professional-top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #eee1e4;
+}
+
+.professional-photo {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-weight: 700;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.professional-top h3 {
+    margin: 0 0 5px;
+    color: #2B1A22;
+    font-size: 21px;
+}
+
+.professional-title {
+    margin: 0 0 8px;
+    color: #7A1B3D;
+    font-size: 14px;
+}
+
+.demo-badge {
+    font-size: 10px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: #F6D9DD;
+    color: #7A1B3D;
+    font-weight: 600;
+}
+
+.professional-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    padding: 24px 0;
+}
+
+.professional-details div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.professional-details span,
+.professional-availability span {
+    font-size: 9px;
+    letter-spacing: 1.3px;
+    color: #967982;
+    font-weight: 700;
+}
+
+.professional-details strong {
+    font-size: 13px;
+    color: #2B1A22;
+    line-height: 1.4;
+}
+
+.professional-bio {
+    background: #FDF4F1;
+    border-radius: 14px;
+    padding: 17px;
+    margin-bottom: 20px;
+}
+
+.professional-bio h4 {
+    margin: 0 0 7px;
+    color: #7A1B3D;
+}
+
+.professional-bio p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #59434b;
+}
+
+.professional-availability {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.professional-availability strong {
+    color: #2B1A22;
+    font-size: 14px;
+}
+
+.professional-availability small {
+    color: #765d65;
+}
+
+@media (max-width: 900px) {
+    .psychologists-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero {
+        padding: 30px;
+    }
+
+    .about-hero h1 {
+        font-size: 34px;
+    }
+}
 </style>
 </head>
 <body>
@@ -586,190 +770,362 @@
   </section>
 
 <main>
-  <!-- ABOUT & PSYCHOLOGISTS -->
+  <!-- ABOUT MINDORA -->
 <section id="about" class="content-section hidden">
 
-    <!-- ABOUT MINDORA -->
-    <div class="section-heading">
-        <div>
-            <h2>About Mindora</h2>
-            <p>A safe space to be heard, understood and supported.</p>
-        </div>
-    </div>
+    <div class="about-page">
 
-    <div class="about-mindora-intro">
-        <p>
-            Mindora is a safe and supportive platform where people can
-            express their thoughts without fear of judgment.
-            We believe everyone deserves to be heard, understood and supported.
-        </p>
+        <!-- ABOUT MINDORA INTRO -->
+        <div class="about-hero">
+            <span class="about-label">ABOUT MINDORA</span>
 
-        <p>
-            Our goal is to make mental-health support more accessible
-            while respecting the privacy and anonymity of our users.
-        </p>
-    </div>
+            <h1>Your mind matters.</h1>
 
-    <!-- PSYCHOLOGISTS -->
-    <div class="section-heading">
-        <div>
-            <h2>Our Psychologists</h2>
-            <p>Connect with a professional for guidance and support.</p>
-        </div>
-    </div>
+            <p>
+                Mindora is a safe and supportive space where people can
+                express their thoughts without fear of judgment.
+                We believe everyone deserves to be heard, understood,
+                and supported.
+            </p>
 
-    <div class="psychologists-grid">
-
-        <!-- DR SAMARTH DUBEY -->
-        <div class="psychologist-about-card">
-
-            <div class="psychologist-profile-header">
-                <div class="psychologist-photo">SD</div>
-
-                <div class="psychologist-basic-info">
-                    <h2>Dr. Samarth Dubey</h2>
-                    <p class="designation">Clinical Psychologist</p>
-                    <p class="verified">✓ Demo Profile</p>
-                </div>
-            </div>
-
-            <div class="professional-details">
-
-                <div class="detail-box">
-                    <span class="detail-icon">🎓</span>
-                    <div>
-                        <h4>Qualification</h4>
-                        <p>M.Phil. in Clinical Psychology</p>
-                    </div>
-                </div>
-
-                <div class="detail-box">
-                    <span class="detail-icon">💼</span>
-                    <div>
-                        <h4>Experience</h4>
-                        <p>7+ Years</p>
-                    </div>
-                </div>
-
-                <div class="detail-box">
-                    <span class="detail-icon">🧠</span>
-                    <div>
-                        <h4>Specialization</h4>
-                        <p>Stress, Anxiety & Student Well-being</p>
-                    </div>
-                </div>
-
-                <div class="detail-box">
-                    <span class="detail-icon">🌐</span>
-                    <div>
-                        <h4>Languages</h4>
-                        <p>English & Hindi</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="about-description">
-                <h3>About</h3>
-                <p>
-                    Focuses on helping individuals manage stress,
-                    understand emotions and develop healthy coping strategies.
-                </p>
-            </div>
-
-            <div class="availability-section">
-                <div>
-                    <h3>Available Slots</h3>
-                    <p>Monday – Friday</p>
-                    <p>11:00 AM – 5:00 PM</p>
-                </div>
-
-                <div class="available-status">
-                    ● Available
-                </div>
-            </div>
-
-            <button class="btn btn-primary">Request Session</button>
-
+            <p>
+                Our aim is to make mental-health support more accessible
+                while respecting the privacy and anonymity of every user.
+            </p>
         </div>
 
 
-        <!-- DR ANANYA SHARMA -->
-        <div class="psychologist-about-card">
+        <!-- PSYCHOLOGISTS -->
+        <div class="psychologist-heading">
+            <span class="about-label">OUR PSYCHOLOGISTS</span>
 
-            <div class="psychologist-profile-header">
-                <div class="psychologist-photo">AS</div>
+            <h2>Meet the Professionals</h2>
 
-                <div class="psychologist-basic-info">
-                    <h2>Dr. Ananya Sharma</h2>
-                    <p class="designation">Clinical Psychologist</p>
-                    <p class="verified">✓ Demo Profile</p>
+            <p>
+                Learn more about the professionals available through
+                our support network.
+            </p>
+        </div>
+
+
+        <div class="psychologists-grid">
+
+
+            <!-- SAMARTH DUBEY -->
+            <div class="professional-card">
+
+                <div class="professional-top">
+
+                    <div class="professional-photo">
+                        <span>SD</span>
+                    </div>
+
+                    <div>
+                        <h3>Dr. Samarth Dubey</h3>
+                        <p class="professional-title">
+                            Clinical Psychologist
+                        </p>
+                        <span class="demo-badge">Demo Profile</span>
+                    </div>
+
                 </div>
+
+
+                <div class="professional-details">
+
+                    <div>
+                        <span>AGE</span>
+                        <strong>34 Years</strong>
+                    </div>
+
+                    <div>
+                        <span>EXPERIENCE</span>
+                        <strong>7+ Years</strong>
+                    </div>
+
+                    <div>
+                        <span>QUALIFICATION</span>
+                        <strong>M.Phil. Clinical Psychology</strong>
+                    </div>
+
+                    <div>
+                        <span>SPECIALIZATION</span>
+                        <strong>Stress & Anxiety</strong>
+                    </div>
+
+                    <div>
+                        <span>LANGUAGES</span>
+                        <strong>English & Hindi</strong>
+                    </div>
+
+                    <div>
+                        <span>SLOTS</span>
+                        <strong>1–2 Hour Sessions</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="professional-bio">
+
+                    <h4>About</h4>
+
+                    <p>
+                        Focuses on supporting individuals dealing with
+                        stress, anxiety and academic pressure through
+                        practical and healthy coping strategies.
+                    </p>
+
+                </div>
+
+
+                <div class="professional-availability">
+                    <span>AVAILABLE</span>
+                    <strong>Monday – Friday</strong>
+                    <small>11:00 AM – 5:00 PM</small>
+                </div>
+
             </div>
 
-            <div class="professional-details">
 
-                <div class="detail-box">
-                    <span class="detail-icon">🎓</span>
-                    <div>
-                        <h4>Qualification</h4>
-                        <p>M.Phil. in Clinical Psychology</p>
+
+            <!-- ANANYA SHARMA -->
+            <div class="professional-card">
+
+                <div class="professional-top">
+
+                    <div class="professional-photo">
+                        <span>AS</span>
                     </div>
+
+                    <div>
+                        <h3>Dr. Ananya Sharma</h3>
+                        <p class="professional-title">
+                            Clinical Psychologist
+                        </p>
+                        <span class="demo-badge">Demo Profile</span>
+                    </div>
+
                 </div>
 
-                <div class="detail-box">
-                    <span class="detail-icon">💼</span>
+
+                <div class="professional-details">
+
                     <div>
-                        <h4>Experience</h4>
-                        <p>8+ Years</p>
+                        <span>AGE</span>
+                        <strong>36 Years</strong>
                     </div>
+
+                    <div>
+                        <span>EXPERIENCE</span>
+                        <strong>8+ Years</strong>
+                    </div>
+
+                    <div>
+                        <span>QUALIFICATION</span>
+                        <strong>M.Phil. Clinical Psychology</strong>
+                    </div>
+
+                    <div>
+                        <span>SPECIALIZATION</span>
+                        <strong>Anxiety & Emotional Well-being</strong>
+                    </div>
+
+                    <div>
+                        <span>LANGUAGES</span>
+                        <strong>English & Hindi</strong>
+                    </div>
+
+                    <div>
+                        <span>SLOTS</span>
+                        <strong>1–2 Hour Sessions</strong>
+                    </div>
+
                 </div>
 
-                <div class="detail-box">
-                    <span class="detail-icon">🧠</span>
-                    <div>
-                        <h4>Specialization</h4>
-                        <p>Anxiety, Stress & Emotional Well-being</p>
-                    </div>
+
+                <div class="professional-bio">
+
+                    <h4>About</h4>
+
+                    <p>
+                        Uses a compassionate and client-centered approach
+                        to help individuals understand emotions and develop
+                        healthy coping strategies.
+                    </p>
+
                 </div>
 
-                <div class="detail-box">
-                    <span class="detail-icon">🌐</span>
-                    <div>
-                        <h4>Languages</h4>
-                        <p>English & Hindi</p>
-                    </div>
+
+                <div class="professional-availability">
+                    <span>AVAILABLE</span>
+                    <strong>Monday – Saturday</strong>
+                    <small>10:00 AM – 6:00 PM</small>
                 </div>
 
             </div>
 
-            <div class="about-description">
-                <h3>About</h3>
-                <p>
-                    Uses a compassionate, client-centered approach to
-                    support individuals dealing with stress and anxiety.
-                </p>
-            </div>
 
-            <div class="availability-section">
-                <div>
-                    <h3>Available Slots</h3>
-                    <p>Monday – Saturday</p>
-                    <p>10:00 AM – 6:00 PM</p>
+
+            <!-- RAHUL MEHRA -->
+            <div class="professional-card">
+
+                <div class="professional-top">
+
+                    <div class="professional-photo">
+                        <span>RM</span>
+                    </div>
+
+                    <div>
+                        <h3>Dr. Rahul Mehra</h3>
+                        <p class="professional-title">
+                            Counselling Psychologist
+                        </p>
+                        <span class="demo-badge">Demo Profile</span>
+                    </div>
+
                 </div>
 
-                <div class="available-status">
-                    ● Available
+
+                <div class="professional-details">
+
+                    <div>
+                        <span>AGE</span>
+                        <strong>32 Years</strong>
+                    </div>
+
+                    <div>
+                        <span>EXPERIENCE</span>
+                        <strong>6+ Years</strong>
+                    </div>
+
+                    <div>
+                        <span>QUALIFICATION</span>
+                        <strong>M.A. Psychology</strong>
+                    </div>
+
+                    <div>
+                        <span>SPECIALIZATION</span>
+                        <strong>Student Mental Health</strong>
+                    </div>
+
+                    <div>
+                        <span>LANGUAGES</span>
+                        <strong>English & Hindi</strong>
+                    </div>
+
+                    <div>
+                        <span>SLOTS</span>
+                        <strong>1–2 Hour Sessions</strong>
+                    </div>
+
                 </div>
+
+
+                <div class="professional-bio">
+
+                    <h4>About</h4>
+
+                    <p>
+                        Supports students and young adults dealing with
+                        academic stress, confidence and personal challenges.
+                    </p>
+
+                </div>
+
+
+                <div class="professional-availability">
+                    <span>AVAILABLE</span>
+                    <strong>Tuesday – Saturday</strong>
+                    <small>12:00 PM – 7:00 PM</small>
+                </div>
+
             </div>
 
-            <button class="btn btn-primary">Request Session</button>
+
+
+            <!-- MEERA KAPOOR -->
+            <div class="professional-card">
+
+                <div class="professional-top">
+
+                    <div class="professional-photo">
+                        <span>MK</span>
+                    </div>
+
+                    <div>
+                        <h3>Dr. Meera Kapoor</h3>
+                        <p class="professional-title">
+                            Counselling Psychologist
+                        </p>
+                        <span class="demo-badge">Demo Profile</span>
+                    </div>
+
+                </div>
+
+
+                <div class="professional-details">
+
+                    <div>
+                        <span>AGE</span>
+                        <strong>35 Years</strong>
+                    </div>
+
+                    <div>
+                        <span>EXPERIENCE</span>
+                        <strong>5+ Years</strong>
+                    </div>
+
+                    <div>
+                        <span>QUALIFICATION</span>
+                        <strong>M.A. Clinical Psychology</strong>
+                    </div>
+
+                    <div>
+                        <span>SPECIALIZATION</span>
+                        <strong>Emotional Well-being</strong>
+                    </div>
+
+                    <div>
+                        <span>LANGUAGES</span>
+                        <strong>English, Hindi & Punjabi</strong>
+                    </div>
+
+                    <div>
+                        <span>SLOTS</span>
+                        <strong>1–2 Hour Sessions</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="professional-bio">
+
+                    <h4>About</h4>
+
+                    <p>
+                        Provides a supportive environment for individuals
+                        working through emotional challenges and everyday
+                        stress.
+                    </p>
+
+                </div>
+
+
+                <div class="professional-availability">
+                    <span>AVAILABLE</span>
+                    <strong>Monday – Thursday</strong>
+                    <small>2:00 PM – 7:00 PM</small>
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
 </section>
+
   <!-- STAFF DASHBOARD -->
   <section class="page" id="page-dashboard">
     <div class="page-header">
